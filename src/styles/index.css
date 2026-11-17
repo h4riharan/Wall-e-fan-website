@@ -1,0 +1,228 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   WALL-E - Beyond the Screen · Design System
+   Palette: industrial yellow, rust orange, charcoal, earth brown, cream.
+   ========================================================================== */
+
+@theme {
+  /* --- Industrial palette --- */
+  --color-yellow-walle: #f0b310;
+  --color-yellow-deep: #c98f06;
+  --color-yellow-soft: #f7cf5e;
+  --color-rust: #c1550b;
+  --color-rust-deep: #8a3c07;
+  --color-ember: #e2712a;
+  --color-charcoal: #17130d;
+  --color-charcoal-soft: #221d15;
+  --color-charcoal-raised: #2c2519;
+  --color-earth: #6b4a2b;
+  --color-earth-deep: #47301b;
+  --color-cream: #f4ecd9;
+  --color-warmwhite: #fbf7ec;
+  --color-plant: #7fb069;
+  --color-eveblue: #63c7e8;
+
+  /* --- Typography --- */
+  --font-display: 'Archivo Black', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* --- Motion --- */
+  --ease-mechanical: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* --- Custom utilities config --- */
+  --animate-blink-soft: blink-soft 2.4s ease-in-out infinite;
+  --animate-scanline: scanline 7s linear infinite;
+  --animate-float-slow: float-slow 7s ease-in-out infinite;
+  --animate-dust: dust 18s linear infinite;
+  --animate-wheel-spin: wheel-spin 2.6s linear infinite;
+
+  @keyframes blink-soft {
+    0%,
+    92%,
+    100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.08);
+    }
+  }
+  @keyframes scanline {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  @keyframes dust {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.55;
+    }
+    90% {
+      opacity: 0.4;
+    }
+    100% {
+      transform: translate3d(-40px, -120px, 0);
+      opacity: 0;
+    }
+  }
+  @keyframes wheel-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: auto; /* Lenis owns scrolling */
+}
+
+html,
+body {
+  overflow-x: clip; /* never allow horizontal overflow */
+  background-color: var(--color-charcoal);
+}
+
+body {
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-yellow-walle);
+  color: var(--color-charcoal);
+}
+
+/* Robotic focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-yellow-walle);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Scrollbar - mechanical rails */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-charcoal);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-earth-deep);
+  border-radius: 8px;
+  border: 2px solid var(--color-charcoal);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-rust);
+}
+
+/* --------------------------------------------------------------------------
+   Utilities & components
+   -------------------------------------------------------------------------- */
+
+@utility text-editorial {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+@utility text-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+@utility glass-panel {
+  background: color-mix(in oklab, var(--color-charcoal-raised) 72%, transparent);
+  backdrop-filter: blur(14px);
+  border: 1px solid color-mix(in oklab, var(--color-cream) 10%, transparent);
+}
+
+@utility hazard-stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-yellow-walle) 0 10px,
+    var(--color-charcoal) 10px 20px
+  );
+}
+
+/* Cinematic film grain overlay (SVG turbulence, GPU-cheap) */
+@utility grain-overlay {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 0.9s steps(4) infinite;
+}
+
+@keyframes grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 3%);
+  }
+  50% {
+    transform: translate(3%, -2%);
+  }
+  75% {
+    transform: translate(-3%, -3%);
+  }
+  100% {
+    transform: translate(2%, 2%);
+  }
+}
+
+/* Vignette for cinematic sections */
+@utility cinematic-vignette {
+  background: radial-gradient(
+    120% 90% at 50% 40%,
+    transparent 40%,
+    color-mix(in oklab, var(--color-charcoal) 62%, transparent) 100%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion - calm everything down
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .grain-overlay {
+    animation: none;
+  }
+}
